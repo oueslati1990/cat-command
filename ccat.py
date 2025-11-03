@@ -47,7 +47,7 @@ def main():
         print(f"Unexpected IO error : {e}", file=sys.stderr)
         exit(1)
 
-    print(content, file=sys.stdout)
+    sys.stdout.buffer.write(content)
 
-if __name__== '__main__':
+if __name__ == '__main__':
     main()
