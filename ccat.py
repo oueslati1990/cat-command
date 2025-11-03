@@ -16,7 +16,7 @@ def read_file(filename):
         bytes: file content as bytes
     """
     with open(filename, 'rb') as f:
-        f.read()
+        return f.read()
 
 
 def main():
