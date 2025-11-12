@@ -27,18 +27,20 @@ def main():
         description="ccat command"
     ) 
 
-    parser.add_argument('filename', nargs='?', default=None,
-                        help='file to analyze (if not provided, reads from stdin)')
+    parser.add_argument('filenames', nargs='*', default=None,
+                        help='file(s) to analyze (if not provided, reads from stdin)')
     
     args = parser.parse_args()
 
     try:
-        if args.filename:
-            content = read_file(args.filename)
+        content = b''
+        if args.filenames:
+            for filename in args.filenames:
+                content += read_file(filename)
         else:
             content = sys.stdin.buffer.read()
     except FileNotFoundError:
-        print(f"ccat: {args.filename}: No such file or directory", file=sys.stderr)
+        print(f"ccat: {filename}: No such file or directory", file=sys.stderr)
         exit(1)
     except PermissionError:
         print(f"You don't have permission to read this file", file=sys.stderr)
