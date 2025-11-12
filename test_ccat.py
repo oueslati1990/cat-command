@@ -97,6 +97,33 @@ def test_second_test_file():
         print("⊘ Test 6 skipped: test2.txt not found")
 
 
+def test_multiple_files():
+    """Test concatenating multiple files"""
+    print("\n[Test 7] Concatenating multiple files...")
+
+    # First, get individual file contents
+    stdout1, _, returncode1 = run_ccat(['test.txt'])
+    stdout2, _, returncode2 = run_ccat(['test2.txt'])
+
+    assert returncode1 == 0 and returncode2 == 0, "Could not read individual files"
+
+    # Now test concatenation
+    stdout, stderr, returncode = run_ccat(['test.txt', 'test2.txt'])
+
+    assert returncode == 0, f"Expected return code 0, got {returncode}"
+    assert stderr == "", f"Expected no stderr, got: {stderr}"
+
+    # Verify output contains both files' content
+    expected_output = stdout1 + stdout2
+    assert stdout == expected_output, "Concatenated output doesn't match expected"
+
+    # Verify content from both files is present
+    assert "ocean" in stdout, "Expected content from test.txt"
+    assert len(stdout) > len(stdout1), "Expected output longer than single file"
+
+    print("✓ Test 7 passed: Successfully concatenated multiple files")
+
+
 if __name__ == '__main__':
     print("=" * 50)
     print("Testing ccat")
@@ -109,6 +136,7 @@ if __name__ == '__main__':
         test_empty_file()
         test_multiple_lines()
         test_second_test_file()
+        test_multiple_files()
 
         print("\n" + "=" * 50)
         print("✓ All tests passed!")
