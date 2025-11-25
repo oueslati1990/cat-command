@@ -55,7 +55,8 @@ def main():
 
     lines_numbered = ''
     index = 0
-    for line in content.decode('utf-8').split('\n'):
+    lines = content.decode('utf-8').split('\n')
+    for i, line in enumerate(lines):
         if args.number:
             lines_numbered += f"{index+1} {line}\n"
             index+=1
@@ -64,9 +65,14 @@ def main():
                 lines_numbered += f"{index+1} {line}\n"
                 index+=1
         else:
-            lines_numbered += f"{line}\n"
+            # Add newline except for the last line if it's empty
+            if i < len(lines) - 1:
+                lines_numbered += f"{line}\n"
+            elif line:  # Last line is not empty, add it with newline
+                lines_numbered += f"{line}\n"
+            # If last line is empty, don't add anything
 
-    print(lines_numbered, file=sys.stdout)
+    print(lines_numbered, file=sys.stdout, end='')
 
 if __name__ == '__main__':
     main()

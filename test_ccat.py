@@ -56,7 +56,7 @@ def test_read_from_stdin():
     test_input = "Hello from stdin!\nLine 2\n"
     stdout, stderr, returncode = run_ccat([], input_data=test_input)
     assert returncode == 0, f"Expected return code 0, got {returncode}"
-    assert stdout == test_input, f"Expected '{test_input}', got '{stdout}'"
+    assert stdout == test_input, f"Expected '{test_input}', got {stdout}"
     assert stderr == "", f"Expected no stderr, got: {stderr}"
     print("✓ Test 3 passed: Successfully read from stdin")
 
@@ -101,13 +101,13 @@ def test_multiple_files():
     """Test concatenating multiple files"""
     print("\n[Test 7] Concatenating multiple files...")
 
-    # First, get individual file contents
+    # FGet individual file contents
     stdout1, _, returncode1 = run_ccat(['test.txt'])
     stdout2, _, returncode2 = run_ccat(['test2.txt'])
 
     assert returncode1 == 0 and returncode2 == 0, "Could not read individual files"
 
-    # Now test concatenation
+    # Test concatenation
     stdout, stderr, returncode = run_ccat(['test.txt', 'test2.txt'])
 
     assert returncode == 0, f"Expected return code 0, got {returncode}"
@@ -122,6 +122,21 @@ def test_multiple_files():
     assert len(stdout) > len(stdout1), "Expected output longer than single file"
 
     print("✓ Test 7 passed: Successfully concatenated multiple files")
+
+def test_numbering_lines_blank_included():
+    """Test displaying lines numbered including blank lines"""
+    print("\n[Test 8] Numbering lines including blank ones...")
+
+    stdout, stderr, returncode = run_ccat(['test.txt', 'c'])
+
+    assert returncode == 0, f"Expected return code 0, got {returncode}"
+    assert stderr == "", f"Expected no errors, got {stderr}"
+
+    out_lines = stdout.split('\n')
+    assert len(out_lines) == 13, f"Expected 13 lines in output, got {len(out_lines)}"
+    assert out_lines[0].split()[0].isdigit(), "Expected a digit in the beginning of the line"
+    
+    print("✓ Test 8 passed: Successfully numbered lines including blank lines")
 
 
 if __name__ == '__main__':
