@@ -54,8 +54,11 @@ def main():
     lines_numbered = ''
     index = 0
     for line in content.decode('utf-8').split('\n'):
-        lines_numbered += f"{index+1} {line}\n"
-        index+=1
+        if args.number:
+            lines_numbered += f"{index+1} {line}\n"
+            index+=1
+        else:
+            lines_numbered += line
 
     print(lines_numbered, file=sys.stdout)
 
