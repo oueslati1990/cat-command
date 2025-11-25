@@ -29,6 +29,8 @@ def main():
 
     parser.add_argument('filenames', nargs='*', default=None,
                         help='file(s) to analyze (if not provided, reads from stdin)')
+    parser.add_argument('-n', '--number', action="store_true",
+                        help="number the lines")
     
     args = parser.parse_args()
 
@@ -49,7 +51,13 @@ def main():
         print(f"Unexpected IO error : {e}", file=sys.stderr)
         exit(1)
 
-    sys.stdout.buffer.write(content)
+    lines_numbered = ''
+    index = 0
+    for line in content.decode('utf-8').split('\n'):
+        lines_numbered += f"{index+1} {line}\n"
+        index+=1
+
+    print(lines_numbered, file=sys.stdout)
 
 if __name__ == '__main__':
     main()
