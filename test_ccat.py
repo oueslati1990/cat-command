@@ -127,16 +127,31 @@ def test_numbering_lines_blank_included():
     """Test displaying lines numbered including blank lines"""
     print("\n[Test 8] Numbering lines including blank ones...")
 
-    stdout, stderr, returncode = run_ccat(['test.txt', 'c'])
+    stdout, stderr, returncode = run_ccat(['test.txt', '-n'])
 
     assert returncode == 0, f"Expected return code 0, got {returncode}"
     assert stderr == "", f"Expected no errors, got {stderr}"
 
-    out_lines = stdout.split('\n')
+    out_lines = stdout.rstrip().split('\n')
     assert len(out_lines) == 13, f"Expected 13 lines in output, got {len(out_lines)}"
     assert out_lines[0].split()[0].isdigit(), "Expected a digit in the beginning of the line"
     
     print("✓ Test 8 passed: Successfully numbered lines including blank lines")
+
+def test_numbering_lines_blank_excluded():
+    """Test displaying lines numbered excluding blank lines"""
+    print("\n[Test 9] Numbering lines excluding blank ones...")
+
+    stdout, stderr, returncode = run_ccat(['test.txt', '-b'])
+
+    assert returncode == 0, f"Expected return code 0, got {returncode}"
+    assert stderr == "", f"Expected no errors, got {stderr}"
+
+    out_lines = stdout.rstrip().split('\n')
+    assert len(out_lines) == 10, f"Expected 10 lines in output, got {len(out_lines)}"
+    assert out_lines[0].split()[0].isdigit(), "Expected a digit in the beginning of the line"
+    
+    print("✓ Test 9 passed: Successfully numbered lines excluding blank lines")
 
 
 if __name__ == '__main__':
@@ -152,6 +167,8 @@ if __name__ == '__main__':
         test_multiple_lines()
         test_second_test_file()
         test_multiple_files()
+        test_numbering_lines_blank_included()
+        test_numbering_lines_blank_excluded()
 
         print("\n" + "=" * 50)
         print("✓ All tests passed!")
