@@ -31,6 +31,8 @@ def main():
                         help='file(s) to analyze (if not provided, reads from stdin)')
     parser.add_argument('-n', '--number', action="store_true",
                         help="number the lines")
+    parser.add_argument('-b', '--blank', action="store_true",
+                        help="excluding blank lines from input")
     
     args = parser.parse_args()
 
@@ -57,8 +59,12 @@ def main():
         if args.number:
             lines_numbered += f"{index+1} {line}\n"
             index+=1
+        elif args.blank:
+            if line:
+                lines_numbered += f"{index+1} {line}\n"
+                index+=1
         else:
-            lines_numbered += line
+            lines_numbered += f"{line}\n"
 
     print(lines_numbered, file=sys.stdout)
 
